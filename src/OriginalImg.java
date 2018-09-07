@@ -22,7 +22,7 @@ public class OriginalImg {
     public static void load()
     {
         File file;
-        String link="C:\\Users\\User\\Documents\\TEC\\ANALISIS\\PROY1\\IMAGEN.png";
+        String link="C:\\Users\\Paulo\\IdeaProjects\\GeneticVanGogh\\Flower.png";
         try{
             file = new File(link);
             img = turnToGray(ImageIO.read(file));

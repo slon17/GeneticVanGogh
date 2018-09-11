@@ -1,107 +1,125 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 
 public class Individual {
 
-    private static BufferedImage image;
-    private float fitness;
+    private BufferedImage image;
+    private int fitness;
+
+
+
+
+
+
+
+
+
+
+
+
     private int[] histogramOriginalImage;
 
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
 
-    public float getFitness() {
-        return fitness;
-    }
+    public static BufferedImage generateRandImage(BufferedImage img)
+    {
+        BufferedImage randImage =   new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        for (int i=0;i<img.getWidth()/2;i++){
+            for (int j=0;j<img.getHeight();j++){
+                Random rand= new Random();
 
-    public BufferedImage getImage() {
-        return image;
-    }
+                int r1= rand.nextInt(256);
+                int g1= rand.nextInt(256);
+                int b1= rand.nextInt(256);
 
-    public void setFitness(float fitness) {
-        this.fitness = fitness;
-    }
+                int r2= rand.nextInt(256);
+                int g2= rand.nextInt(256);
+                int b2= rand.nextInt(256);
 
-    public static BufferedImage generateRandImage(BufferedImage img) {
-        BufferedImage randImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        for (int i = 0; i < img.getWidth() / 2; i++) {
-            for (int j = 0; j < img.getHeight(); j++) {
-                Random rand = new Random();
-
-                int r1 = rand.nextInt(256);
-                int g1 = rand.nextInt(256);
-                int b1 = rand.nextInt(256);
-
-                int r2 = rand.nextInt(256);
-                int g2 = rand.nextInt(256);
-                int b2 = rand.nextInt(256);
-
-                Color newColor1 = new Color((r1 + g1 + b1) / 3, (r1 + g1 + b1) / 3, (r1 + g1 + b1) / 3);
-                Color newColor2 = new Color((r2 + g2 + b2) / 3, (r2 + g2 + b2) / 3, (r2 + g2 + b2) / 3);
-                randImage.setRGB(i, j, newColor1.getRGB());
-                randImage.setRGB(randImage.getWidth() - i - 1, randImage.getHeight() - j - 1, newColor2.getRGB());
+                Color newColor1 = new Color((r1+g1+b1)/3,(r1+g1+b1)/3,(r1+g1+b1)/3);
+                Color newColor2 = new Color((r2+g2+b2)/3,(r2+g2+b2)/3,(r2+g2+b2)/3);
+                randImage.setRGB(i,j,newColor1.getRGB());
+                randImage.setRGB(randImage.getWidth()-i-1,randImage.getHeight()-j-1,newColor2.getRGB());
             }
         }
-        return randImage;
+        return  randImage;
     }
-
-    public static ArrayList<Color> getMainColors(){
-        ArrayList<Color> colors = new ArrayList<Color>();
-        ArrayList<Integer> finalColors = getColorApparition();
-
-        for (int i = 0; i<finalColors.size();i++){
-            Color color =new Color(finalColors.get(i), finalColors.get(i), finalColors.get(i));
-            colors.add(color);
-            System.out.println(color.getRed());
+    public static int[] generateHistogram(BufferedImage img)
+    {
+        String  sector ="";
+        int index=0;
+        int[] histogram = new int[256];
+        int[][] smallMat = new int[3][3];
+        for(int i=1; i<256; i++){
+            histogram[i]=0;
         }
-        return colors;
-    }
-    public static ArrayList<Integer> getColorApparition() {
-        ArrayList<Integer> colorApparition = new ArrayList<Integer>();
 
-        for(int i=0; i<256;i++){
-            colorApparition.add(0);
-        }
-        for (int i=0;i<image.getWidth();i++){
-            for (int j=0;j<image.getHeight();j++){
-                int actualPixel = (new Color (image.getRGB(i,j))).getRed();
-                colorApparition.set(actualPixel,colorApparition.get(actualPixel)+1);
+        for(int i=1; i<img.getWidth()-1; i++){
+            for(int j=1; j<img.getHeight()-1; j++){
+                int actualPixel = (new Color (img.getRGB(i,j))).getRed();
+                index=generateBinaryNumber(generateSmallMat(i,j,img,actualPixel));
+
+                histogram[index]+=1;
+                //System.out.println((Integer.parseInt(sector,2)));
+                //sector="";
             }
         }
-        return  getDifferentFromZero(colorApparition);
+        System.out.println("Histogram done");
+        //       for(int i=0;i<256;i++){
+        //           System.out.println(histogram[i]);
+        //       }
+        return histogram;
     }
-    public static ArrayList<Integer> getDifferentFromZero(ArrayList<Integer> colorApparition){
-
-        ArrayList<Integer[]> differentFromZero = new ArrayList<Integer[]>();
-
-        for (int i=0;i<colorApparition.size();i++){
-            if(colorApparition.get(i)!=0){
-                Integer[] par = new Integer[2];
-                par[0]=colorApparition.get(i);
-                par[1]=i;
-                differentFromZero.add(par);
+    public static String[][] generateSmallMat(int i,int j,BufferedImage img,int actualPixel)
+    {
+        String [][] grid = new String[3][3];
+        for(int s=0; s<3; s++){
+            for(int d=0; d<3;d++){
+                int neighbor=(new Color (img.getRGB((i-1)+s,(j-1)+d))).getRed();
+                if(actualPixel<=neighbor){
+                    grid[s][d]="1";
+                }else{
+                    grid[s][d]="0";
+                }
             }
         }
-        Collections.sort(differentFromZero, new Comparator<Integer[]>() {
-            public int compare(Integer[] int1, Integer[] int2) {
-                Integer numOfKeys1 = int1[0];
-                Integer numOfKeys2 = int2[0];
-                return numOfKeys1.compareTo(numOfKeys2);
-            }
-        });
-        return getTwentyPercentage(differentFromZero);
+        return grid;
     }
-    public static ArrayList<Integer> getTwentyPercentage (ArrayList<Integer[]> differentFromZero){
-        float twentyPercent =Math.round(((float)(differentFromZero.size())/100)*20);
-        ArrayList<Integer> twentyPercentColors = new ArrayList<Integer>();
-        for (int i=differentFromZero.size()-1;i>differentFromZero.size()-twentyPercent;i--){
-            twentyPercentColors.add(differentFromZero.get(i)[1]);
+    public static int generateBinaryNumber(String[][] grid)
+    {
+        int binary=0;
+        String binaryString="";
+        for(int i=0;i<=2;i++)
+        {
+            binaryString+=(grid[0][i]);
         }
-        return twentyPercentColors;
+        for(int i=1;i<=2;i++)
+        {
+            binaryString+=(grid[i][2]);
+        }
+        for(int i=1;i>=0;i--)
+        {
+            binaryString+=(grid[2][i]);
+        }
+        binaryString+=grid[1][0];
+        //System.out.println(binaryString);
+        //System.out.println((Integer.parseInt(binaryString,2)));
+        binary=(Integer.parseInt(binaryString,2));
+        return binary;
+    }
+    public float grade(int[] newImage)
+    {
+        float sum=0;
+        float grade;
+        for(int i=0;i<256;i++)
+        {
+            if(histogramOriginalImage[i]==newImage[i]){
+                sum=sum+1;
+            }
+        }
+        grade=(100*sum)/256;
+        System.out.println("grade:");
+        System.out.println(grade);
+        return grade;
     }
 }

@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class MainGui {
 
@@ -17,7 +16,7 @@ public class MainGui {
 
 
     public MainGui() {
-
+        Population population = new Population();
 
 
         btnLoad.addActionListener(new ActionListener() {
@@ -27,29 +26,9 @@ public class MainGui {
                 //loadImageTest
                 original = new OriginalImg();
                 original.load();
-                Euclidean euclidean = new Euclidean();
-                euclidean.setOriginal(original.img);
-                //POBLACION DE PRUEBA
-                ArrayList<Individual> populationTest= new ArrayList<Individual>();
-                for (int i=0;i<20;i++){
-                    Individual individual = new Individual();
-                    individual.setImage(individual.generateRandImage(original.img));
-                    populationTest.add(individual);
-                }
-                //CORRIDA CON EUCLIDEANO
-                euclidean.euclidean(populationTest);
                 setImageShowMain(original.img);
-                //CORRIDA CON LBP
-                LocalBinaryPattern localBinaryPattern =new LocalBinaryPattern();
-                localBinaryPattern.setHistogramOriginalImage(localBinaryPattern.generateHistogram(original.img));
-                localBinaryPattern.localBinaryPattern(populationTest);
 
-                populationTest.get(0).getMainColors();
-
-                for (int i=0;i<20;i++){
-
-                }
-
+                population.generatePopulation(1000);
             }
         });
         runLBPButton.addActionListener(new ActionListener() {

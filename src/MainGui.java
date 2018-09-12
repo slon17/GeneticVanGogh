@@ -5,32 +5,43 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-public class Gui1 {
+public class MainGui {
 
     private JButton btnLoad;
     public JLabel imageShowMain;
     private JPanel panel;
     private JLabel imageShowTest;
+    private JButton runLBPButton;
+    private OriginalImg original;
 
-    public Gui1() {
+
+    public MainGui() {
+
+
+
         btnLoad.addActionListener(new ActionListener() {
             @Override
             //button pressed
             public void actionPerformed(ActionEvent e) {
                 //loadImageTest
-                OriginalImg original = new OriginalImg();
+                original = new OriginalImg();
                 original.load();
-                //newGeneticClass
-                GeneticAlg geneticAlg =new GeneticAlg();
-                geneticAlg.histogramOriginalImage=geneticAlg.generateHistogram(original.img);
-                BufferedImage randImg = geneticAlg.generateRandImage(original.img);
+
+
+                setImageShowMain(original.img);
+            }
+        });
+        runLBPButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LocalBinaryPattern lbp = new LocalBinaryPattern();
+                //geneticAlg.histogramOriginalImage=geneticAlg.generateHistogram(original.img);
+                //BufferedImage randImg = geneticAlg.generateRandImage(original.img);
                 //comparing 2 histograms
-                geneticAlg.grade(geneticAlg.generateHistogram(randImg));
+                //geneticAlg.grade(geneticAlg.generateHistogram(randImg));
                 //displayTest
 
                 //BufferedImage resized= resize(geneticAlg.generateRandImage(original.img),original.img.getHeight()*2,original.img.getWidth()*2);
-                System.out.println("load_done");
-                setImageShowMain(original.img,randImg);
             }
         });
     }
@@ -44,7 +55,7 @@ public class Gui1 {
     }
     public static void main(String[] args){
         JFrame mainframe = new JFrame("start");
-        mainframe.setContentPane(new Gui1().panel);
+        mainframe.setContentPane(new MainGui().panel);
         mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainframe.setSize(600,600);
         mainframe.setVisible(true);
@@ -54,10 +65,9 @@ public class Gui1 {
         // TODO: place custom component creation code here
 
     }
-    public void setImageShowMain(BufferedImage img,BufferedImage resized)
+    public void setImageShowMain(BufferedImage img)
     {
         imageShowMain.setIcon(new ImageIcon(img));
-        imageShowTest.setIcon(new ImageIcon(resized));
         System.out.println("image_displayed");
     }
 }

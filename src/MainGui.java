@@ -16,7 +16,7 @@ public class MainGui {
 
 
     public MainGui() {
-
+        Population population = new Population();
 
 
         btnLoad.addActionListener(new ActionListener() {
@@ -26,9 +26,9 @@ public class MainGui {
                 //loadImageTest
                 original = new OriginalImg();
                 original.load();
-
-
                 setImageShowMain(original.img);
+
+                population.generatePopulation(1000);
             }
         });
         runLBPButton.addActionListener(new ActionListener() {

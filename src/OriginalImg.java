@@ -21,7 +21,7 @@ public class OriginalImg {
     public static void load()
     {
         File file;
-        String link="C:\\Users\\User\\IdeaProjects\\GeneticVanGogh\\Flower.png";
+        String link="C:\\Users\\Paulo\\IdeaProjects\\GeneticVanGogh\\Flower.png";
         try{
             file = new File(link);
             img = turnToGray(ImageIO.read(file));
@@ -51,4 +51,7 @@ public class OriginalImg {
         return img;
     }
 
+    public static BufferedImage getImg() {
+        return img;
+    }
 }

@@ -50,4 +50,8 @@ public class Individual {
     public BufferedImage getImage() {
         return image;
     }
+
+    public BufferedImage getImage() {
+        return image;
+    }
 }

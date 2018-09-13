@@ -2,11 +2,19 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import  java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.imageio.ImageIO;
 public class LocalBinaryPattern {
-    protected int[] histogramOriginalImage;
+    protected static int[] histogramOriginalImage;
 
+    public static void localBinaryPattern(ArrayList<Individual> population){
+        System.out.println("LocalBinaryPattern:");
+        for(int i = 0;i<population.size();i++) {
+            population.get(i).setFitness(grade(generateHistogram(population.get(i).getImage())));
+            System.out.println(population.get(i).getFitness());
+        }
+    }
 
     public static int[] generateHistogram(BufferedImage img)
     {
@@ -24,14 +32,8 @@ public class LocalBinaryPattern {
                 index=generateBinaryNumber(generateSmallMat(i,j,img,actualPixel));
 
                 histogram[index]+=1;
-                //System.out.println((Integer.parseInt(sector,2)));
-                //sector="";
             }
         }
-        System.out.println("Histogram done");
-        //       for(int i=0;i<256;i++){
-        //           System.out.println(histogram[i]);
-        //       }
         return histogram;
     }
     public static String[][] generateSmallMat(int i,int j,BufferedImage img,int actualPixel)
@@ -71,7 +73,12 @@ public class LocalBinaryPattern {
         binary=(Integer.parseInt(binaryString,2));
         return binary;
     }
-    public float grade(int[] newImage)
+
+    public static void setHistogramOriginalImage(int[] histogramOriginalImage) {
+        LocalBinaryPattern.histogramOriginalImage = histogramOriginalImage;
+    }
+
+    public static float grade(int[] newImage)
     {
         float sum=0;
         float grade;
@@ -82,8 +89,8 @@ public class LocalBinaryPattern {
             }
         }
         grade=(100*sum)/256;
-        System.out.println("grade:");
-        System.out.println(grade);
+        //System.out.println("grade:");
+        //System.out.println(grade);
         return grade;
     }
 

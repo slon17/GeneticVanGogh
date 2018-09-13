@@ -104,4 +104,8 @@ public class Individual {
         }
         return twentyPercentColors;
     }
+
+    public BufferedImage getImage() {
+        return image;
+    }
 }

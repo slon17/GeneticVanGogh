@@ -1,13 +1,11 @@
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import  java.awt.image.BufferedImage;
 import java.util.Random;
 import javax.imageio.ImageIO;
-public class GeneticAlg {
+public class LocalBinaryPattern {
     protected int[] histogramOriginalImage;
-
 
 
     public static int[] generateHistogram(BufferedImage img)
@@ -31,9 +29,9 @@ public class GeneticAlg {
             }
         }
         System.out.println("Histogram done");
- //       for(int i=0;i<256;i++){
- //           System.out.println(histogram[i]);
- //       }
+        //       for(int i=0;i<256;i++){
+        //           System.out.println(histogram[i]);
+        //       }
         return histogram;
     }
     public static String[][] generateSmallMat(int i,int j,BufferedImage img,int actualPixel)

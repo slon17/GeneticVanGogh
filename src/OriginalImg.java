@@ -3,20 +3,19 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import  java.awt.image.BufferedImage;
-import java.util.Random;
 import javax.imageio.ImageIO;
 /*https://www.youtube.com/watch?v=lGX0Gc6d51s*/
 
 public class OriginalImg {
 
-    static Gui1 gui=null;
+    static MainGui gui=null;
     static BufferedImage img;
     static int[] histograma = new int[256];
 
     public static void main(String[] args)
     {
 
-        gui=new Gui1();
+        gui=new MainGui();
 
     }
     public static void load()
@@ -52,4 +51,7 @@ public class OriginalImg {
         return img;
     }
 
+    public static BufferedImage getImg() {
+        return img;
+    }
 }

@@ -46,4 +46,8 @@ public class Individual {
     public int getHeight() {
         return height;
     }
+
+    public BufferedImage getImage() {
+        return image;
+    }
 }

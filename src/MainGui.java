@@ -17,7 +17,7 @@ public class MainGui {
 
 
     public MainGui() {
-        Population population = new Population(1000);
+        Population population = new Population(100);
 
 
         btnLoad.addActionListener(new ActionListener() {
@@ -27,8 +27,29 @@ public class MainGui {
                 //loadImageTest
                 original = new OriginalImg();
                 original.load();
+                population.generatePopulation(100);
+                /*for(int j=0; j<100;j++) {
+                    population.getPopulation().get(j).setFitness(j);
+                    System.out.println("Individuo: "+population.getPopulation().get(j).getFitness());
+                }*/
+
                 Euclidean euclidean = new Euclidean();
                 euclidean.setOriginal(original.img);
+
+                for(int i = 0; i<100; i++){
+                    euclidean.euclidean(population.getPopulation());
+                    population.reproduceAll(original.getMainColors());
+                    setImageShowTest(population.getPopulation().get(i).getImage());
+                }
+
+                setImageShowMain(original.img);
+
+
+
+
+
+
+                /*
                 //POBLACION DE PRUEBA
                 ArrayList<Individual> populationTest= new ArrayList<Individual>();
                 for (int i=0;i<20;i++){
@@ -44,11 +65,11 @@ public class MainGui {
                 localBinaryPattern.setHistogramOriginalImage(localBinaryPattern.generateHistogram(original.img));
                 localBinaryPattern.localBinaryPattern(populationTest);
 
-                populationTest.get(0).getMainColors();
+                //populationTest.get(0).getMainColors();
 
                 for (int i=0;i<20;i++){
 
-                }
+                }*/
 
             }
         });
@@ -89,6 +110,12 @@ public class MainGui {
     public void setImageShowMain(BufferedImage img)
     {
         imageShowMain.setIcon(new ImageIcon(img));
+        System.out.println("image_displayed");
+    }
+
+    public void setImageShowTest(BufferedImage img)
+    {
+        imageShowTest.setIcon(new ImageIcon(img));
         System.out.println("image_displayed");
     }
 }

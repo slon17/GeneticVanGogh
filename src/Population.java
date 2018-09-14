@@ -9,17 +9,22 @@ public class Population {
 
     private ArrayList<Individual> population;
     private int individualsQuantity;
+    private int currentGeneration;
 
     public Population(int individualsQuantity) {
         population = new ArrayList<>();
         this.individualsQuantity = individualsQuantity;
+        currentGeneration = 0;
     }
 
     public void generatePopulation(int initialPopulation){
         for(int i = 0; i<initialPopulation; i++){
-            Individual newIndividual = new Individual(Individual.generateRandImage(OriginalImg.getImg()));
+            //Individual newIndividual = new Individual(Individual.generateRandImage(OriginalImg.getImg()));
+            Individual newIndividual = new Individual();
+            newIndividual.setImage(newIndividual.generateRandImage(OriginalImg.img));
             population.add(newIndividual);
-            System.out.println(newIndividual);
+            //System.out.println("Individuo: "+population.get(population.size()-1).getImage());
+            //System.out.println(newIndividual);
         }
     }
 
@@ -47,7 +52,7 @@ public class Population {
         int randomWidth = random.nextInt(individual1.getWidth());
         int randomHeight = random.nextInt(individual1.getHeight());
         int randomSide = random.nextInt(2);
-        System.out.println(randomSide);
+        //System.out.println(randomSide);
 
         BufferedImage newImage = new BufferedImage(individual1.getWidth(), individual1.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Color mutationColor = mutation(mainColors);
@@ -90,8 +95,8 @@ public class Population {
         Random random = new Random(System.currentTimeMillis());
         while(population.size()>1){
             int randomParent1 = random.nextInt(population.size());
-            int randomParent2 = random.nextInt(population.size());
             Individual parent1 = population.remove(randomParent1);
+            int randomParent2 = random.nextInt(population.size());
             Individual parent2 = population.remove(randomParent2);
             Individual son = reproduce(parent1, parent2, mainColors);
             sons.add(son);
@@ -103,6 +108,8 @@ public class Population {
             int randomParent = random.nextInt(usedParents.size());
             population.add(usedParents.remove(randomParent));
         }
+        currentGeneration++;
+        System.out.println("Current generation: "+currentGeneration);
     }
 
 

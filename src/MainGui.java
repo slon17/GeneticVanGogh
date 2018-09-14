@@ -17,7 +17,7 @@ public class MainGui {
 
 
     public MainGui() {
-
+        Population population = new Population();
 
 
         btnLoad.addActionListener(new ActionListener() {

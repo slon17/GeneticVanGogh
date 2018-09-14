@@ -9,7 +9,15 @@ public class Individual {
 
     private static BufferedImage image;
     private float fitness;
+    private int width;
+    private int height;
     private int[] histogramOriginalImage;
+
+    public Individual(BufferedImage image) {
+        this.image = image;
+        this.width = image.getWidth();
+        this.height = image.getHeight();
+    }
 
     public void setImage(BufferedImage image) {
         this.image = image;
@@ -105,7 +113,12 @@ public class Individual {
         return twentyPercentColors;
     }
 
-    public BufferedImage getImage() {
-        return image;
+    public int getWidth() {
+        return width;
     }
+
+    public int getHeight() {
+        return height;
+    }
+
 }

@@ -17,7 +17,7 @@ public class MainGui {
 
 
     public MainGui() {
-        Population population = new Population();
+        Population population = new Population(1000);
 
 
         btnLoad.addActionListener(new ActionListener() {
@@ -32,8 +32,8 @@ public class MainGui {
                 //POBLACION DE PRUEBA
                 ArrayList<Individual> populationTest= new ArrayList<Individual>();
                 for (int i=0;i<20;i++){
-                    Individual individual = new Individual();
-                    individual.setImage(individual.generateRandImage(original.img));
+                    Individual individual = new Individual(Individual.generateRandImage(original.img));
+                    //individual.setImage(individual.generateRandImage(original.img));
                     populationTest.add(individual);
                 }
                 //CORRIDA CON EUCLIDEANO

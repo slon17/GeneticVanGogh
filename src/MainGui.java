@@ -27,21 +27,29 @@ public class MainGui {
                 //loadImageTest
                 original = new OriginalImg();
                 original.load();
+
                 population.generatePopulation(100);
                 /*for(int j=0; j<100;j++) {
                     population.getPopulation().get(j).setFitness(j);
                     System.out.println("Individuo: "+population.getPopulation().get(j).getFitness());
                 }*/
-
                 Euclidean euclidean = new Euclidean();
                 euclidean.setOriginal(original.img);
+                euclidean.euclidean(population.getPopulation());
+
+                population.sort(population.getPopulation(),0,99);
+                System.out.println("ordenados:");
+                for(int i = 0; i<100; i++){
+                    System.out.println(population.getPopulation().get(i).getFitness());
+                }
+                /*
 
                 for(int i = 0; i<100; i++){
                     euclidean.euclidean(population.getPopulation());
                     population.reproduceAll(original.getMainColors());
                     setImageShowTest(population.getPopulation().get(i).getImage());
                 }
-
+*/
                 setImageShowMain(original.img);
 
 

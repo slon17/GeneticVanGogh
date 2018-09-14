@@ -113,6 +113,13 @@ public class Population {
         ArrayList<Individual> sons = new ArrayList<>();
         ArrayList<Individual> usedParents = new ArrayList<>();
         Random random = new Random(System.currentTimeMillis());
+
+        sort(population, 0, population.size()-1);
+
+        ArrayList <Individual> badIndividuals = getPartPopulation(0, population.size()/3);
+        ArrayList <Individual> regularIndividuals = getPartPopulation(population.size()/3, population.size()/3*2);
+        ArrayList <Individual> bestIndividuals = getPartPopulation(population.size()/3*2, population.size());
+
         while(population.size()>1){
             int randomParent1 = random.nextInt(population.size());
             Individual parent1 = population.remove(randomParent1);

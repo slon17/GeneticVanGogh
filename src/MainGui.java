@@ -43,6 +43,13 @@ public class MainGui {
                 LocalBinaryPattern localBinaryPattern =new LocalBinaryPattern();
                 localBinaryPattern.setHistogramOriginalImage(localBinaryPattern.generateHistogram(original.img));
                 localBinaryPattern.localBinaryPattern(populationTest);
+
+                populationTest.get(0).getMainColors();
+
+                for (int i=0;i<20;i++){
+
+                }
+
             }
         });
         runLBPButton.addActionListener(new ActionListener() {

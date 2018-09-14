@@ -3,20 +3,20 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Euclidean {
-    private static BufferedImage original;
+    private BufferedImage original;
 
     public void setOriginal(BufferedImage original) {
         this.original = original;
     }
 
-    public static void euclidean(ArrayList<Individual> population) {
+    public void euclidean(ArrayList<Individual> population) {
         System.out.println("Euclidean:");
         for(int i = 0;i<population.size();i++) {
             population.get(i).setFitness(sum(population.get(i).getImage()));
             System.out.println(population.get(i).getFitness());
         }
     }
-    public static float sum(BufferedImage actual){
+    public float sum(BufferedImage actual){
         int sum=0;
         for(int i = 0;i<original.getWidth();i++){
             for (int j = 0;j<original.getHeight();j++){

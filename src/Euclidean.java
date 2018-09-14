@@ -13,7 +13,7 @@ public class Euclidean {
         System.out.println("Euclidean:");
         for(int i = 0;i<population.size();i++) {
             population.get(i).setFitness(sum(population.get(i).getImage()));
-            System.out.println(population.get(i).getFitness());
+            //System.out.println(population.get(i).getFitness());
         }
     }
     public float sum(BufferedImage actual){

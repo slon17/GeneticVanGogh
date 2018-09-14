@@ -11,6 +11,7 @@ public class Population {
     private int individualsQuantity;
     private int currentGeneration;
 
+
     public Population(int individualsQuantity) {
         population = new ArrayList<>();
         this.individualsQuantity = individualsQuantity;
@@ -146,6 +147,46 @@ public class Population {
 
     public void setPopulation(ArrayList<Individual> population) {
         this.population = population;
+    }
+
+    public int partition(ArrayList<Individual> population, int low, int high)
+    {
+        Individual pivot = population.get(high);
+        int i = (low-1); // index of smaller element
+        for (int j=low; j<high; j++)
+        {
+            // If current element is smaller than or
+            // equal to pivot
+            if (population.get(j).getFitness() <= pivot.getFitness())
+            {
+                i++;
+
+                // swap arr[i] and arr[j]
+                Individual temp = population.get(i);
+                population.set(i,population.get(j));
+                population.set(j,temp);
+            }
+        }
+        Individual temp = population.get(i+1);
+        population.set(i+1,population.get(high));
+        population.set(high,temp);
+
+        return i+1;
+    }
+
+    public void sort(ArrayList<Individual> population, int low, int high)
+    {
+        if (low < high)
+        {
+            /* pi is partitioning index, arr[pi] is
+              now at right place */
+            int pi = partition(population, low, high);
+
+            // Recursively sort elements before
+            // partition and after partition
+            sort(population, low, pi-1);
+            sort(population, pi+1, high);
+        }
     }
 
 }

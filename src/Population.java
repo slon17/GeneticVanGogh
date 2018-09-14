@@ -38,6 +38,25 @@ public class Population {
         return null;
     }
 
+
+    public Individual reproduceByPixel(Individual individual1, Individual individual2){
+        Individual son = new Individual();
+        BufferedImage newImage = new BufferedImage(individual1.getWidth(), individual1.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        for(int i=0; i<individual1.getWidth(); i++){
+            for(int j=0; j<individual1.getHeight(); j++){
+                if(j/2==0){
+                    newImage.setRGB(i,j,individual1.getImage().getRGB(i,j));
+                }
+                else{
+                    newImage.setRGB(i,j,individual2.getImage().getRGB(i,j));
+                }
+            }
+        }
+        son.setImage(newImage);
+        return son;
+    }
+
     public Individual reproduce(Individual individual1, Individual individual2, ArrayList<Color> mainColors) {
         /*ArrayList <Individual> sons = new ArrayList<>();
         ArrayList <Individual> part1 = getPartPopulation(0, population.size()/4);
@@ -98,7 +117,7 @@ public class Population {
             Individual parent1 = population.remove(randomParent1);
             int randomParent2 = random.nextInt(population.size());
             Individual parent2 = population.remove(randomParent2);
-            Individual son = reproduce(parent1, parent2, mainColors);
+            Individual son = reproduceByPixel(parent1, parent2);
             sons.add(son);
             usedParents.add(parent1);
             usedParents.add(parent2);

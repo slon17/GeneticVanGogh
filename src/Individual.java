@@ -120,7 +120,7 @@ public class Individual {
         return getTwentyPercentage(differentFromZero);
     }
     public ArrayList<Integer> getTwentyPercentage (ArrayList<Integer[]> differentFromZero){
-        float twentyPercent =Math.round(((float)(differentFromZero.size())/100)*20);
+        float twentyPercent =Math.round(((float)(differentFromZero.size())/100)*60);
         ArrayList<Integer> twentyPercentColors = new ArrayList<Integer>();
         for (int i=differentFromZero.size()-1;i>differentFromZero.size()-twentyPercent;i--){
             twentyPercentColors.add(differentFromZero.get(i)[1]);

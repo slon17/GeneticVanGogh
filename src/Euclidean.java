@@ -10,7 +10,7 @@ public class Euclidean {
     }
 
     public void euclidean(ArrayList<Individual> population) {
-        System.out.println("Euclidean:");
+        //System.out.println("Euclidean:");
         for(int i = 0;i<population.size();i++) {
             population.get(i).setFitness(sum(population.get(i).getImage()));
             //System.out.println(population.get(i).getFitness());

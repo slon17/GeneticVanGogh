@@ -32,7 +32,7 @@ public class Population {
     public Color mutation(ArrayList<Color> mainColors){
         Random random = new Random(System.currentTimeMillis());
         int randomPercentage = random.nextInt(256);
-        if(randomPercentage < 20){
+        if(randomPercentage < 2){
             int randomColor = random.nextInt(mainColors.size());
             return mainColors.get(randomColor);
         }
@@ -59,14 +59,6 @@ public class Population {
     }
 
     public Individual reproduce(Individual individual1, Individual individual2, ArrayList<Color> mainColors) {
-        /*ArrayList <Individual> sons = new ArrayList<>();
-        ArrayList <Individual> part1 = getPartPopulation(0, population.size()/4);
-        ArrayList <Individual> part2 = getPartPopulation(population.size()/4, population.size()/4*2);
-        ArrayList <Individual> part3 = getPartPopulation(population.size()/4*2, population.size()/4*3);
-        ArrayList <Individual> part4 = getPartPopulation(population.size()/4*3, population.size());
-
-        int moduleWidth = population.get(0).getWidth()%4;
-        int moduleHeight = population.get(0).getHeight()%4;*/
 
         Random random = new Random(System.currentTimeMillis());
         int randomWidth = random.nextInt(individual1.getWidth());
@@ -117,26 +109,91 @@ public class Population {
         sort(population, 0, population.size()-1);
 
         ArrayList <Individual> badIndividuals = getPartPopulation(0, population.size()/3);
-        ArrayList <Individual> regularIndividuals = getPartPopulation(population.size()/3, population.size()/3*2);
-        ArrayList <Individual> bestIndividuals = getPartPopulation(population.size()/3*2, population.size());
+        ArrayList <Individual> regularIndividuals = getPartPopulation(population.size()/3, (population.size()/3)*2);
+        ArrayList <Individual> bestIndividuals = getPartPopulation((population.size()/3)*2, population.size());
 
-        while(population.size()>1){
-            int randomParent1 = random.nextInt(population.size());
-            Individual parent1 = population.remove(randomParent1);
-            int randomParent2 = random.nextInt(population.size());
-            Individual parent2 = population.remove(randomParent2);
-            Individual son = reproduceByPixel(parent1, parent2);
-            sons.add(son);
-            usedParents.add(parent1);
-            usedParents.add(parent2);
+        int badQuantity = badIndividuals.size();
+        int tempBadQuantity = badQuantity;
+        int regularQuantity = regularIndividuals.size();
+        int tempRegularQuantity = regularQuantity;
+        int bestQuantity = bestIndividuals.size();
+        int tempBestQuantity = bestQuantity;
+        int tempTotal = individualsQuantity;
+
+        while(tempTotal>1){
+            Individual parent1 = null;
+            Individual parent2 = null;
+            Individual son = null;
+            if(bestIndividuals.size() != 0){
+                if(tempBestQuantity > bestQuantity/2){//reproduce best with best
+                    int randomParent1 = random.nextInt(bestIndividuals.size());
+                    parent1 = bestIndividuals.remove(randomParent1);
+                    int randomParent2 = random.nextInt(bestIndividuals.size());
+                    parent2 = bestIndividuals.remove(randomParent2);
+                    son = reproduce(parent1, parent2, mainColors);
+                    tempBestQuantity = tempBestQuantity-2;
+                }
+                else{//reproduce best with regular
+                    //System.out.println("Best size: "+bestIndividuals.size());
+                    int randomParent1 = random.nextInt(bestIndividuals.size());
+                    parent1 = bestIndividuals.remove(randomParent1);
+                    int randomParent2 = random.nextInt(regularIndividuals.size());
+                    parent2 = regularIndividuals.remove(randomParent2);
+                    son = reproduce(parent1, parent2, mainColors);
+                    tempBestQuantity--;
+                    tempRegularQuantity--;
+                    if(tempBestQuantity == 1){
+                        regularIndividuals.add(bestIndividuals.remove(0));
+                        regularQuantity++;
+                        tempRegularQuantity++;
+                    }
+                }
+            }
+            else if(badIndividuals.size() != 0){
+                    if(tempBadQuantity > badQuantity/2){//reproduce bad with bad
+                        int randomParent1 = random.nextInt(badIndividuals.size());
+                        parent1 = badIndividuals.remove(randomParent1);
+                        int randomParent2 = random.nextInt(badIndividuals.size());
+                        parent2 = badIndividuals.remove(randomParent2);
+                        son = reproduce(parent1, parent2, mainColors);
+                        tempBadQuantity = tempBadQuantity-2;
+                    }
+                    else{//reproduce regular with bad
+                        int randomParent1 = random.nextInt(badIndividuals.size());
+                        parent1 = badIndividuals.remove(randomParent1);
+                        int randomParent2 = random.nextInt(regularIndividuals.size());
+                        parent2 = regularIndividuals.remove(randomParent2);
+                        son = reproduce(parent1, parent2, mainColors);
+                        tempBestQuantity--;
+                        tempRegularQuantity--;
+                        //System.out.println("Regular with bad");
+                    }
+            }
+            tempTotal--;
+            if(son !=null || parent1!=null || parent2!=null){
+                sons.add(son);
+                //System.out.println("1");
+                usedParents.add(parent1);
+                //System.out.println("2");
+                usedParents.add(parent2);
+                //System.out.println("3");
+            }
         }
         population = sons;
-        while(population.size()<individualsQuantity){
-            int randomParent = random.nextInt(usedParents.size());
-            population.add(usedParents.remove(randomParent));
+        while(sons.size()<individualsQuantity){
+            //System.out.println(usedParents.size());
+            if(usedParents.size()==0){
+                Individual tempIndividual = population.get(0);
+                population.add(tempIndividual);
+            }
+            else {
+                int randomParent = random.nextInt(usedParents.size());
+                population.add(usedParents.remove(randomParent));
+            }
         }
+        sort(population,0,population.size()-1);
         currentGeneration++;
-        System.out.println("Current generation: "+currentGeneration);
+        //System.out.println("Current generation: "+currentGeneration);
     }
 
 

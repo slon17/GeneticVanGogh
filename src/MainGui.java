@@ -17,7 +17,7 @@ public class MainGui {
 
 
     public MainGui() {
-        Population population = new Population(2);
+        Population population = new Population(100);
 
 
         btnLoad.addActionListener(new ActionListener() {
@@ -28,16 +28,48 @@ public class MainGui {
                 original = new OriginalImg();
                 original.load();
 
+                population.generatePopulation(100);
                 Individual ind = new Individual();
                 ind.setImage(original.img);
-                population.getPopulation().add(ind);
+                //population.getPopulation().add(ind);
+                /*for(int j=0; j<100;j++) {
+                    population.getPopulation().get(j).setFitness(j);
+                    System.out.println("Individuo: "+population.getPopulation().get(j).getFitness());
+                }*/
+                Euclidean euclidean = new Euclidean();
+                euclidean.setOriginal(original.img);
+                euclidean.euclidean(population.getPopulation());
+
+                LocalBinaryPattern LCB = new LocalBinaryPattern();
+                LCB.histogramOriginalImage = LCB.generateHistogram(original.img);
+                //LCB.localBinaryPattern(population.getPopulation());
+
+                //population.sort(population.getPopulation(),0,499);
+                /*System.out.println("ordenados:");
+                for(int i = 0; i<100; i++){
+                    System.out.println(population.getPopulation().get(i).getFitness());
+                }*/
+
+
+                for(int i = 0; i<4000; i++){
+                    euclidean.euclidean(population.getPopulation());
+                    //LCB.localBinaryPattern(population.getPopulation());
+                    population.reproduceAllByFour(original.getMainColors());
+                }
+
+                setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
+                setImageShowMain(resize(original.img,100,100));
+
+                //Individual ind = new Individual();
+                /*ind.setImage(original.img);
+                //population.getPopulation().add(ind);
                 Individual ind2 = new Individual();
-                population.getPopulation().add(ind);
-                ind2.generateRandImage(original.img);
-                Individual ind3 = population.reproduce(ind,ind2,original.getMainColors());
+                //population.getPopulation().add(ind);
+                ind2.setImage(ind2.generateRandImage(original.img));
+                Individual ind3 = population.reproduceByFour(ind,ind2,original.getMainColors());
 
                 setImageShowTest(resize(ind3.getImage(),100,100));
-                setImageShowMain(resize(original.img,100,100));
+                setImageShowMain(resize(original.img,100,100));*/
 
 
 

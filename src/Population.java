@@ -252,5 +252,39 @@ public class Population {
             sort(population, pi+1, high);
         }
     }
+    public ArrayList<BufferedImage> divideImage(BufferedImage individual){
+        ArrayList<BufferedImage> array = new ArrayList<BufferedImage>();
+        BufferedImage newImage1 = new BufferedImage(individual.getWidth(), individual.getHeight()/2, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage newImage2 = new BufferedImage(individual.getWidth(), individual.getHeight()/2, BufferedImage.TYPE_INT_ARGB);
+        for(int i=0;i<individual.getWidth();i++){
+            for(int j=0;j<individual.getHeight()/2;i++){
+                newImage1.setRGB(i,j,individual.getRGB(i,j));
+            }
+        }
+        for(int i=0;i<individual.getWidth();i++){
+            for(int j=individual.getHeight()/2;j<individual.getHeight();i++){
+                newImage2.setRGB(i,j,individual.getRGB(i,j));
+            }
+        }
+        array.add(newImage1);
+        array.add(newImage2);
+
+        return array;
+    }
+    public BufferedImage joinImage(BufferedImage img1, BufferedImage img2){
+        BufferedImage newImage = new BufferedImage(img1.getWidth()*2, img1.getHeight()*2, BufferedImage.TYPE_INT_ARGB);
+        ArrayList<BufferedImage> array = new ArrayList<BufferedImage>();
+        for(int i=0;i<img1.getWidth();i++){
+            for(int j=0;j<img1.getHeight();i++){
+                newImage.setRGB(i,j,img1.getRGB(i,j));
+            }
+        }
+        for(int i=0;i<img2.getWidth();i++){
+            for(int j=img2.getHeight();j<img2.getHeight();i++){
+                newImage.setRGB(i,j+img2.getHeight(),img2.getRGB(i,j));
+            }
+        }
+        return  newImage;
+    }
 
 }

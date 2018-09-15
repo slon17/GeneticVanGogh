@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class MainGui {
 
@@ -16,7 +17,7 @@ public class MainGui {
 
 
     public MainGui() {
-        Population population = new Population();
+        Population population = new Population(2);
 
 
         btnLoad.addActionListener(new ActionListener() {
@@ -26,9 +27,45 @@ public class MainGui {
                 //loadImageTest
                 original = new OriginalImg();
                 original.load();
-                setImageShowMain(original.img);
 
-                population.generatePopulation(1000);
+                Individual ind = new Individual();
+                ind.setImage(original.img);
+                population.getPopulation().add(ind);
+                Individual ind2 = new Individual();
+                population.getPopulation().add(ind);
+                ind2.generateRandImage(original.img);
+                Individual ind3 = population.reproduce(ind,ind2,original.getMainColors());
+
+                setImageShowTest(resize(ind3.getImage(),100,100));
+                setImageShowMain(resize(original.img,100,100));
+
+
+
+
+
+
+                /*
+                //POBLACION DE PRUEBA
+                ArrayList<Individual> populationTest= new ArrayList<Individual>();
+                for (int i=0;i<20;i++){
+                    Individual individual = new Individual(Individual.generateRandImage(original.img));
+                    //individual.setImage(individual.generateRandImage(original.img));
+                    populationTest.add(individual);
+                }
+                //CORRIDA CON EUCLIDEANO
+                euclidean.euclidean(populationTest);
+                setImageShowMain(original.img);
+                //CORRIDA CON LBP
+                LocalBinaryPattern localBinaryPattern =new LocalBinaryPattern();
+                localBinaryPattern.setHistogramOriginalImage(localBinaryPattern.generateHistogram(original.img));
+                localBinaryPattern.localBinaryPattern(populationTest);
+
+                //populationTest.get(0).getMainColors();
+
+                for (int i=0;i<20;i++){
+
+                }*/
+
             }
         });
         runLBPButton.addActionListener(new ActionListener() {
@@ -68,6 +105,12 @@ public class MainGui {
     public void setImageShowMain(BufferedImage img)
     {
         imageShowMain.setIcon(new ImageIcon(img));
+        System.out.println("image_displayed");
+    }
+
+    public void setImageShowTest(BufferedImage img)
+    {
+        imageShowTest.setIcon(new ImageIcon(img));
         System.out.println("image_displayed");
     }
 }

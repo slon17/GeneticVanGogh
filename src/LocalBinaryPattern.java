@@ -9,10 +9,10 @@ public class LocalBinaryPattern {
     protected static int[] histogramOriginalImage;
 
     public static void localBinaryPattern(ArrayList<Individual> population){
-        System.out.println("LocalBinaryPattern:");
+        //System.out.println("LocalBinaryPattern:");
         for(int i = 0;i<population.size();i++) {
             population.get(i).setFitness(grade(generateHistogram(population.get(i).getImage())));
-            System.out.println(population.get(i).getFitness());
+            //System.out.println(population.get(i).getFitness());
         }
     }
 

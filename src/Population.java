@@ -9,23 +9,17 @@ public class Population {
 
     private ArrayList<Individual> population;
     private int individualsQuantity;
-    private int currentGeneration;
-
 
     public Population(int individualsQuantity) {
         population = new ArrayList<>();
         this.individualsQuantity = individualsQuantity;
-        currentGeneration = 0;
     }
 
     public void generatePopulation(int initialPopulation){
         for(int i = 0; i<initialPopulation; i++){
-            //Individual newIndividual = new Individual(Individual.generateRandImage(OriginalImg.getImg()));
-            Individual newIndividual = new Individual();
-            newIndividual.setImage(newIndividual.generateRandImage(OriginalImg.img));
+            Individual newIndividual = new Individual(Individual.generateRandImage(OriginalImg.getImg()));
             population.add(newIndividual);
-            //System.out.println("Individuo: "+population.get(population.size()-1).getImage());
-            //System.out.println(newIndividual);
+            System.out.println(newIndividual);
         }
     }
 
@@ -37,25 +31,6 @@ public class Population {
             return mainColors.get(randomColor);
         }
         return null;
-    }
-
-
-    public Individual reproduceByPixel(Individual individual1, Individual individual2){
-        Individual son = new Individual();
-        BufferedImage newImage = new BufferedImage(individual1.getWidth(), individual1.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-        for(int i=0; i<individual1.getWidth(); i++){
-            for(int j=0; j<individual1.getHeight(); j++){
-                if(j/2==0){
-                    newImage.setRGB(i,j,individual1.getImage().getRGB(i,j));
-                }
-                else{
-                    newImage.setRGB(i,j,individual2.getImage().getRGB(i,j));
-                }
-            }
-        }
-        son.setImage(newImage);
-        return son;
     }
 
     public Individual reproduce(Individual individual1, Individual individual2, ArrayList<Color> mainColors) {
@@ -72,7 +47,7 @@ public class Population {
         int randomWidth = random.nextInt(individual1.getWidth());
         int randomHeight = random.nextInt(individual1.getHeight());
         int randomSide = random.nextInt(2);
-        //System.out.println(randomSide);
+        System.out.println(randomSide);
 
         BufferedImage newImage = new BufferedImage(individual1.getWidth(), individual1.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Color mutationColor = mutation(mainColors);
@@ -115,10 +90,10 @@ public class Population {
         Random random = new Random(System.currentTimeMillis());
         while(population.size()>1){
             int randomParent1 = random.nextInt(population.size());
-            Individual parent1 = population.remove(randomParent1);
             int randomParent2 = random.nextInt(population.size());
+            Individual parent1 = population.remove(randomParent1);
             Individual parent2 = population.remove(randomParent2);
-            Individual son = reproduceByPixel(parent1, parent2);
+            Individual son = reproduce(parent1, parent2, mainColors);
             sons.add(son);
             usedParents.add(parent1);
             usedParents.add(parent2);
@@ -128,8 +103,6 @@ public class Population {
             int randomParent = random.nextInt(usedParents.size());
             population.add(usedParents.remove(randomParent));
         }
-        currentGeneration++;
-        System.out.println("Current generation: "+currentGeneration);
     }
 
 
@@ -147,46 +120,6 @@ public class Population {
 
     public void setPopulation(ArrayList<Individual> population) {
         this.population = population;
-    }
-
-    public int partition(ArrayList<Individual> population, int low, int high)
-    {
-        Individual pivot = population.get(high);
-        int i = (low-1); // index of smaller element
-        for (int j=low; j<high; j++)
-        {
-            // If current element is smaller than or
-            // equal to pivot
-            if (population.get(j).getFitness() <= pivot.getFitness())
-            {
-                i++;
-
-                // swap arr[i] and arr[j]
-                Individual temp = population.get(i);
-                population.set(i,population.get(j));
-                population.set(j,temp);
-            }
-        }
-        Individual temp = population.get(i+1);
-        population.set(i+1,population.get(high));
-        population.set(high,temp);
-
-        return i+1;
-    }
-
-    public void sort(ArrayList<Individual> population, int low, int high)
-    {
-        if (low < high)
-        {
-            /* pi is partitioning index, arr[pi] is
-              now at right place */
-            int pi = partition(population, low, high);
-
-            // Recursively sort elements before
-            // partition and after partition
-            sort(population, low, pi-1);
-            sort(population, pi+1, high);
-        }
     }
 
 }

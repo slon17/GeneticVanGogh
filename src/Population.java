@@ -525,43 +525,4 @@ public class Population {
         return  newImage;
     }
 
-    public ArrayList<BufferedImage> divideImage(BufferedImage individual){
-        //System.out.println("Imagen a div: "+individual.getHeight()+" "+individual.getWidth());
-        ArrayList<BufferedImage> array = new ArrayList<>();
-        BufferedImage newImage1 = new BufferedImage(individual.getWidth(), individual.getHeight()/2, BufferedImage.TYPE_INT_ARGB);
-        BufferedImage newImage2 = new BufferedImage(individual.getWidth(), individual.getHeight()/2, BufferedImage.TYPE_INT_ARGB);
-        for(int i=0;i<newImage1.getWidth();i++){
-            for(int j=0;j<newImage1.getHeight();j++){
-                newImage1.setRGB(i,j,individual.getRGB(i,j));
-            }
-        }
-        for(int i=0;i<newImage2.getWidth();i++){
-            for(int j=0;j<newImage2.getHeight();j++){
-                newImage2.setRGB(i,j,individual.getRGB(i,j+16));
-            }
-        }
-        array.add(newImage1);
-        array.add(newImage2);
-        //System.out.println("Dimension 1: "+newImage1.getHeight()+" "+newImage1.getWidth());
-        //System.out.println("Dimension 2: "+newImage2.getHeight()+" "+newImage2.getWidth());
-
-        return array;
-    }
-    public BufferedImage joinImage(BufferedImage img1, BufferedImage img2){
-        BufferedImage newImage = new BufferedImage(img1.getWidth(), img1.getHeight()*2, BufferedImage.TYPE_INT_ARGB);
-        ArrayList<BufferedImage> array = new ArrayList<BufferedImage>();
-        for(int i=0;i<img1.getWidth();i++){
-            for(int j=0;j<img1.getHeight();j++){
-                newImage.setRGB(i,j,img1.getRGB(i,j));
-            }
-        }
-        for(int i=0;i<img2.getWidth();i++){
-            for(int j=0;j<img2.getHeight();j++){
-                newImage.setRGB(i,j+16,img2.getRGB(i,j));
-            }
-        }
-        //System.out.println("Imagen unida: "+newImage.getHeight()+" "+newImage.getWidth());
-        return  newImage;
-    }
-
 }

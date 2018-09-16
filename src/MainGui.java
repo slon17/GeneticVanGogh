@@ -24,24 +24,40 @@ public class MainGui {
             @Override
             //button pressed
             public void actionPerformed(ActionEvent e) {
+                PinkSauce pink =new PinkSauce();
+                pink.setDimension(5);
+
                 //loadImageTest
                 original = new OriginalImg();
                 original.load();
+                ArrayList<Color> colorsOriginal=original.getMainColors();
+                //poblacion de prueba
+                ArrayList<Individual> populationTest= new ArrayList<Individual>();
+                for (int i=0;i<20;i++){
+                    Individual individual = new Individual();
+                    individual.setImage(individual.generateRandImage(original.img));
+                    populationTest.add(individual);
+                }
+                pink.setqColorsOriginal(pink.qColors(original.img));
+                pink.setOriginalColors(original.getMainColors());
+                System.out.println("main colors " + original.getMainColors().size());
+                pink.colorsToInt();
+                pink.pinkSauce(populationTest);
 
-                population.generatePopulation(100);
-                Individual ind = new Individual();
-                ind.setImage(original.img);
+                //population.generatePopulation(100);
+                //Individual ind = new Individual();
+                //ind.setImage(original.img);
                 //population.getPopulation().add(ind);
                 /*for(int j=0; j<100;j++) {
                     population.getPopulation().get(j).setFitness(j);
                     System.out.println("Individuo: "+population.getPopulation().get(j).getFitness());
                 }*/
-                Euclidean euclidean = new Euclidean();
-                euclidean.setOriginal(original.img);
-                euclidean.euclidean(population.getPopulation());
+                //Euclidean euclidean = new Euclidean();
+                //euclidean.setOriginal(original.img);
+                //euclidean.euclidean(population.getPopulation());
 
-                LocalBinaryPattern LCB = new LocalBinaryPattern();
-                LCB.histogramOriginalImage = LCB.generateHistogram(original.img);
+                //LocalBinaryPattern LCB = new LocalBinaryPattern();
+                //LCB.histogramOriginalImage = LCB.generateHistogram(original.img);
                 //LCB.localBinaryPattern(population.getPopulation());
 
                 //population.sort(population.getPopulation(),0,499);
@@ -51,14 +67,14 @@ public class MainGui {
                 }*/
 
 
-                for(int i = 0; i<2000; i++){
-                    euclidean.euclidean(population.getPopulation());
+                //for(int i = 0; i<2000; i++){
+                  //  euclidean.euclidean(population.getPopulation());
                     //LCB.localBinaryPattern(population.getPopulation());
-                    population.reproduceAllByFour(original.getMainColors());
-                }
+                    //population.reproduceAllByFour(original.getMainColors());
+                //}
 
-                setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
-                setImageShowMain(resize(original.img,100,100));
+                //setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
+                //setImageShowMain(resize(original.img,100,100));
 
                 //Individual ind = new Individual();
                 /*ind.setImage(original.img);

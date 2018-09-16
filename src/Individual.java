@@ -40,7 +40,7 @@ public class Individual {
         this.fitness = fitness;
     }
 
-    public BufferedImage generateRandImage(BufferedImage img) {
+    public static  BufferedImage generateRandImage(BufferedImage img) {
         BufferedImage randImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
         for (int i = 0; i < img.getWidth() / 2; i++) {
             for (int j = 0; j < img.getHeight(); j++) {

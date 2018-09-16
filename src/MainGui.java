@@ -24,9 +24,18 @@ public class MainGui {
             @Override
             //button pressed
             public void actionPerformed(ActionEvent e) {
+                PinkSauce pink =new PinkSauce();
+                pink.setDimension(5);
+
                 //loadImageTest
                 original = new OriginalImg();
                 original.load();
+
+                pink.setqColorsOriginal(pink.qColors(original.img));
+                pink.setOriginalColors(original.getMainColors());
+                System.out.println("main colors " + original.getMainColors().size());
+                pink.colorsToInt();
+                pink.pinkSauce(populationTest);
 
                 population.generatePopulation(100);
                 Individual ind = new Individual();

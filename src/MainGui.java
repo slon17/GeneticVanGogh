@@ -51,7 +51,7 @@ public class MainGui {
                 }*/
 
 
-                for(int i = 0; i<4000; i++){
+                for(int i = 0; i<2000; i++){
                     euclidean.euclidean(population.getPopulation());
                     //LCB.localBinaryPattern(population.getPopulation());
                     population.reproduceAllByFour(original.getMainColors());

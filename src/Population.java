@@ -39,6 +39,32 @@ public class Population {
         return null;
     }
 
+    public Individual mirrorXMutation(Individual individual){
+        BufferedImage tempImage = new BufferedImage(individual.getWidth(), individual.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        for(int i = 0; i<individual.getWidth(); i++){
+            for(int j = 0; j<individual.getHeight(); j++){
+                Color color1 = new Color(individual.getImage().getRGB(individual.getWidth()-i, individual.getHeight()));
+                tempImage.setRGB(color1.getRGB(), i, j);
+            }
+        }
+        Individual mirrorIndividual = new Individual();
+        mirrorIndividual.setImage(tempImage);
+        return mirrorIndividual;
+    }
+
+    public Individual mirrorYMutation(Individual individual){
+        BufferedImage tempImage = new BufferedImage(individual.getWidth(), individual.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        for(int i = 0; i<individual.getWidth(); i++){
+            for(int j = 0; j<individual.getHeight(); j++){
+                Color color1 = new Color(individual.getImage().getRGB(individual.getWidth(), individual.getHeight()-j));
+                tempImage.setRGB(color1.getRGB(), i, j);
+            }
+        }
+        Individual mirrorIndividual = new Individual();
+        mirrorIndividual.setImage(tempImage);
+        return mirrorIndividual;
+    }
+
 
     public Individual reproduceByPixel(Individual individual1, Individual individual2){
         Individual son = new Individual();
@@ -74,6 +100,15 @@ public class Population {
         newIndividual2X.setImage(dividedImage.get(0));
         newIndividual2Y.setImage(dividedImage.get(1));
 
+        int randomOrder = random.nextInt(100);
+        /*BufferedImage newImage;
+        if(randomOrder > 20){
+            newImage = joinImage(reproduce(newIndividual1X, newIndividual2X, mainColors, random).getImage(), reproduce(newIndividual1Y, newIndividual2Y, mainColors, random).getImage());
+        }
+        else{
+            newImage = joinImage(reproduce(newIndividual1X, newIndividual2Y, mainColors, random).getImage(), reproduce(newIndividual1Y, newIndividual2X, mainColors, random).getImage());
+        }*/
+
         BufferedImage newImage = joinImage(reproduce(newIndividual1X, newIndividual2X, mainColors, random).getImage(), reproduce(newIndividual1Y, newIndividual2Y, mainColors, random).getImage());
         Individual finalIndividual = new Individual();
         finalIndividual.setImage(newImage);
@@ -87,7 +122,7 @@ public class Population {
         //Random random = new Random(System.currentTimeMillis());
         int randomWidth = random.nextInt(individual1.getWidth()/4*3-individual1.getWidth()/4)+individual1.getWidth()/4;
         int randomHeight = random.nextInt(individual1.getHeight()/4*3-individual1.getHeight()/4)+individual1.getHeight()/4;
-        int randomSide = random.nextInt(2);
+        int randomSide = random.nextInt(100);
         //System.out.println(randomSide);
 
         BufferedImage newImage = new BufferedImage(individual1.getWidth(), individual1.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -99,7 +134,7 @@ public class Population {
                     newImage.setRGB(i, j, mutationColor.getRGB());
                     continue;
                 }
-                if (randomSide == 0) {
+                if (randomSide > 50) {
                     if (i < randomWidth && j < randomHeight) {
                         Color newColor = new Color(individual1.getImage().getRGB(i, j));
                         newImage.setRGB(i, j, newColor.getRGB());
@@ -458,7 +493,7 @@ public class Population {
 
     public ArrayList<BufferedImage> divideImage(BufferedImage individual){
         //System.out.println("Imagen a div: "+individual.getHeight()+" "+individual.getWidth());
-        ArrayList<BufferedImage> array = new ArrayList<BufferedImage>();
+        ArrayList<BufferedImage> array = new ArrayList<>();
         BufferedImage newImage1 = new BufferedImage(individual.getWidth(), individual.getHeight()/2, BufferedImage.TYPE_INT_ARGB);
         BufferedImage newImage2 = new BufferedImage(individual.getWidth(), individual.getHeight()/2, BufferedImage.TYPE_INT_ARGB);
         for(int i=0;i<newImage1.getWidth();i++){

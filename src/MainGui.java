@@ -51,10 +51,10 @@ public class MainGui {
                 }*/
 
 
-                for(int i = 0; i<2000; i++){
+                for(int i = 0; i<4000; i++){
                     euclidean.euclidean(population.getPopulation());
                     //LCB.localBinaryPattern(population.getPopulation());
-                    population.reproduceAllByFour(original.getMainColors());
+                    population.reproduceAllByFour(original.getMainColors(), 5);
                 }
 
                 setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));

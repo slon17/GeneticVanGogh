@@ -24,7 +24,7 @@ public class OriginalImg {
     public static void load()
     {
         File file;
-        String link="Flower.png";
+        String link="play.png";
         try{
             file = new File(link);
             img = turnToGray(ImageIO.read(file));

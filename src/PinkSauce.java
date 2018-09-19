@@ -34,8 +34,8 @@ public class PinkSauce {
 
     public void pinkSauce(ArrayList<Individual> population){
         for (int i=0;i<population.size();i++){
-            population.get(i).setFitness(finalGrade(qColors(population.get(i).getImage()),verifyNeighbors(population.get(i).getImage(),generateCoordinates()),10,50,40));
-            //System.out.println(population.get(i).getFitness());
+            population.get(i).setFitness(finalGrade(qColors(population.get(i).getImage()),verifyNeighbors(population.get(i).getImage(),generateCoordinates()),0,0,100));
+            System.out.println(population.get(i).getFitness());
         }
     }
     public void colorsToInt(){
@@ -96,10 +96,9 @@ public class PinkSauce {
                 }
 
 
-                if(cuenta>=((float)validos/100)*10){
+                if(((float)100/validos)*cuenta<=30){
                     if(coloresOriginalesEnteros.contains(actual.getRed())){
                         gruposGrandesSimilaresAOriginal+=1;
-
                     }
                 }
 
@@ -109,8 +108,9 @@ public class PinkSauce {
             }
         }
         //System.out.println((float)suma/(32*32));
-        qColoresIguales = ((float)coloresOriginalesEnteros.size()/100)*gruposGrandesSimilaresAOriginal;
-        System.out.println("Colores Iguales:"+qColoresIguales);
+        qColoresIguales = ((float)100/(32*32)) * gruposGrandesSimilaresAOriginal;
+        gruposGrandesSimilaresAOriginal=0;
+        //System.out.println("Colores Iguales:"+qColoresIguales);
         float grade = (((float)suma/(32*32))*((float)2/100));
         return grade;
     }
@@ -118,7 +118,7 @@ public class PinkSauce {
         int[] colors = new int[256];
         int qColors=0;
         for (int i=0;i<img.getWidth();i++){
-            for (int j=0;j<img.getWidth();j++){
+            for (int j=0;j<img.getHeight();j++){
                 int color = (new Color(img.getRGB(i,j))).getRed();
                 colors[color]+=1;
             }
@@ -132,9 +132,9 @@ public class PinkSauce {
         return  qColors;
     }
     public float finalGrade(float colors, float groupedColors, float colorImportance, float groupedImportance, float equalColorImportance){
-        float colorGrade=((float)100/qColorsOriginal)*colors;
-        float total = (colors*(colorImportance/100))+(groupedColors*(groupedImportance/100))+(qColoresIguales*(equalColorImportance/100));
-        System.out.println(total);
+        float colorGrade=((float)qColorsOriginal/100)*colors;
+        float total = (qColoresIguales);
+        //System.out.println(total);
         return total;
     }
 }

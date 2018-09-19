@@ -25,7 +25,7 @@ public class MainGui {
             //button pressed
             public void actionPerformed(ActionEvent e) {
                 PinkSauce pink =new PinkSauce();
-                pink.setDimension(5);
+                pink.setDimension(11);
 
                 //loadImageTest
                 original = new OriginalImg();
@@ -35,7 +35,6 @@ public class MainGui {
                 pink.setOriginalColors(original.getMainColors());
                 System.out.println("main colors " + original.getMainColors().size());
                 pink.colorsToInt();
-                pink.pinkSauce(populationTest);
 
                 population.generatePopulation(100);
                 Individual ind = new Individual();
@@ -49,21 +48,18 @@ public class MainGui {
                 euclidean.setOriginal(original.img);
                 euclidean.euclidean(population.getPopulation());
 
+                pink.pinkSauce(population.getPopulation());
+
                 LocalBinaryPattern LCB = new LocalBinaryPattern();
                 LCB.histogramOriginalImage = LCB.generateHistogram(original.img);
                 //LCB.localBinaryPattern(population.getPopulation());
 
-                //population.sort(population.getPopulation(),0,499);
-                /*System.out.println("ordenados:");
-                for(int i = 0; i<100; i++){
-                    System.out.println(population.getPopulation().get(i).getFitness());
-                }*/
 
-
-                for(int i = 0; i<4000; i++){
-                    euclidean.euclidean(population.getPopulation());
+                for(int i = 0; i<1000; i++){
+                    //euclidean.euclidean(population.getPopulation());
                     //LCB.localBinaryPattern(population.getPopulation());
-                    population.reproduceAllByFour(original.getMainColors(), 5);
+                    pink.pinkSauce(population.getPopulation());
+                    population.reproduceAllByFour(original.getMainColors(), 5, false);
                 }
 
                 setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));

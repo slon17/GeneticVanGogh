@@ -51,7 +51,7 @@ public class MainGui {
             public void actionPerformed(ActionEvent e) {
 
                 setImageShowOriginal(resize(original.img, 100, 100));
-                population.beginGenerationsEuclidean(original.getMainColors(), 5, true, false, 500, 100);
+                population.beginGenerationsEuclidean(original.getMainColors(), 5, true, false, 1200, 100);
 
                 fillLabels(population.getProcessIndividuals());
 
@@ -80,7 +80,7 @@ public class MainGui {
         btnReset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                population.resetPopulation();
             }
         });
     }

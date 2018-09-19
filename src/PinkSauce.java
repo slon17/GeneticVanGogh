@@ -69,26 +69,26 @@ public class PinkSauce {
         }*/
         return array;
     }
-    public float verifyNeighbors(BufferedImage image,ArrayList<int[][]> coordinates){
+    public float verifyNeighbors(BufferedImage image,ArrayList<int[][]> coordinates){   //7*7*n^2 = O(n^2)
         int gruposGrandesSimilaresAOriginal = 0;
         float suma = 0;
         ArrayList<Integer> bigGroups = new ArrayList<>();
-        for(int x = 0; x<image.getWidth(); x++){
-            for(int y = 0; y<image.getHeight();y++){
-                Color actual = new Color(image.getRGB(x,y));
-                float cuenta = 0;
-                int validos=0;
-                for(int i = 0;i<coordinates.size();i++){
-                    for(int j = 0; j<coordinates.size();j++){
-                        int a = x+coordinates.get(i)[j][0];
-                        int b = y+coordinates.get(i)[j][1];
-                        if(a>=0 && b>=0 && a<image.getWidth() && b <image.getHeight()){
+        for(int x = 0; x<image.getWidth(); x++){                                        //(m+1)*c = 7+1*c (tamano de matriz usada)
+            for(int y = 0; y<image.getHeight();y++){                                    //(m+1)*c = 7+1*c (tamano de matriz usada)
+                Color actual = new Color(image.getRGB(x,y));                            //1+1 = c (asignacion + indexacion)
+                float cuenta = 0;                                                       //1+1 = c (asignacion + indexacion)
+                int validos=0;                                                          //1+1 = c (asignacion + indexacion)
+                for(int i = 0;i<coordinates.size();i++){                                //(n+1)*c (n = tamano de la imagen)
+                    for(int j = 0; j<coordinates.size();j++){                           //(n+1)*c (n = tamano de la imagen) lstlisting
+                        int a = x+coordinates.get(i)[j][0];                             //1+1+1 = c (asignacion + indexacion + suma)
+                        int b = y+coordinates.get(i)[j][1];                             //1+1+1 = c (asignacion + indexacion + suma)
+                        if(a>=0 && b>=0 && a<image.getWidth() && b <image.getHeight()){ //1+1+1+1 = c (comparacion*4)
 
-                            Color neighbor = new Color(image.getRGB(a,b));
-                            if(!(a==x && b==y)){
-                                validos+=1;
-                                if(neighbor.getRed()==actual.getRed()){
-                                    cuenta+=1;
+                            Color neighbor = new Color(image.getRGB(a,b));              //1+1+ = c (asignacion + indexacion)
+                            if(!(a==x && b==y)){                                        //1+1 = c (comparacion)
+                                validos+=1;                                             //1+1 = c (asignacion + suma)
+                                if(neighbor.getRed()==actual.getRed()){                 //1 = c (comparacion)
+                                    cuenta+=1;                                          //1+1 = c (asignacion + suma)
                                 }
                             }
                         }

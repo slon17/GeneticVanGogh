@@ -119,8 +119,6 @@ public class Population {
                     reproduce(newIndividual1Y, newIndividual2X, mainColors, mutationPercentage, random, 5, mutationFlag, colorMutationFlag).getImage());
         }
 
-        //newImage = joinImage(reproduce(newIndividual1X, newIndividual2X, mainColors, mutationPercentage, random, 5, mutationFlag).getImage(),
-        //        reproduce(newIndividual1Y, newIndividual2Y, mainColors, mutationPercentage, random, 5, mutationFlag).getImage());
         Individual finalIndividual = new Individual();
         finalIndividual.setImage(newImage);
 

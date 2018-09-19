@@ -9,10 +9,30 @@ import java.util.ArrayList;
 public class MainGui {
 
     private JButton btnLoad;
-    public JLabel imageShowMain;
+    public JLabel imageShow0;
     private JPanel panel;
-    private JLabel imageShowTest;
+    private JLabel imageShow9;
     private JButton runLBPButton;
+    private JLabel imageShow1;
+    private JLabel imageShow2;
+    private JLabel imageShow3;
+    private JLabel imageShow5;
+    private JLabel imageShow6;
+    private JLabel imageShow7;
+    private JLabel imageShow8;
+    private JButton btnPink;
+    private JLabel imageShow4;
+    private JLabel lblImage5;
+    private JLabel lblImage9;
+    private JLabel lblImage6;
+    private JLabel lblImage7;
+    private JLabel lblImage8;
+    private JLabel imageShowOriginal;
+    private JLabel lblImage0;
+    private JLabel lblImage1;
+    private JLabel lblImage2;
+    private JLabel lblImage3;
+    private JLabel lblImage4;
     private OriginalImg original;
 
 
@@ -29,20 +49,30 @@ public class MainGui {
             //button pressed
             public void actionPerformed(ActionEvent e) {
 
-                population.beginGenerationsEuclidean(original.getMainColors(), 5, true, false, 1000, 100);
+                setImageShowOriginal(resize(original.img, 100, 100));
+                population.beginGenerationsEuclidean(original.getMainColors(), 5, true, false, 500, 100);
 
-                setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
-                setImageShowMain(resize(original.img,100,100));
+                fillLabels(population.getProcessIndividuals());
 
             }
         });
         runLBPButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                population.beginGenerationsLBP(original.getMainColors(), 5, true, false, 1000, 100);
 
-                setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
-                setImageShowMain(resize(original.img,100,100));
+                setImageShowOriginal(resize(original.img, 100, 100));
+                population.beginGenerationsLBP(original.getMainColors(), 5, true, false, 200, 100);
+
+                fillLabels(population.getProcessIndividuals());
+            }
+        });
+        btnPink.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                population.beginGenerationsPink(original.getMainColors(), 5, true, false, 1000, 100, 11);
+
+                setImageShow9(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
+                setImageShow0(resize(original.img,100,100));
             }
         });
     }
@@ -55,26 +85,96 @@ public class MainGui {
         return resized;
     }
     public static void main(String[] args){
-        JFrame mainframe = new JFrame("start");
+        JFrame mainframe = new JFrame("Genetic Van Gogh");
         mainframe.setContentPane(new MainGui().panel);
         mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainframe.setSize(600,600);
+        mainframe.setSize(600,700);
         mainframe.setVisible(true);
-        System.out.println("frame_build");
+        //System.out.println("frame_build");
     }
     private void createUIComponents() {
         // TODO: place custom component creation code here
 
     }
-    public void setImageShowMain(BufferedImage img)
+    public void setImageShow0(BufferedImage img)
     {
-        imageShowMain.setIcon(new ImageIcon(img));
-        System.out.println("image_displayed");
+        imageShow0.setIcon(new ImageIcon(img));
+        //System.out.println("image_displayed");
     }
 
-    public void setImageShowTest(BufferedImage img)
+    public void setImageShow1(BufferedImage img)
     {
-        imageShowTest.setIcon(new ImageIcon(img));
-        System.out.println("image_displayed");
+        imageShow1.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow2(BufferedImage img)
+    {
+        imageShow2.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow3(BufferedImage img)
+    {
+        imageShow3.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow4(BufferedImage img)
+    {
+        imageShow4.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow5(BufferedImage img)
+    {
+        imageShow5.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow6(BufferedImage img)
+    {
+        imageShow6.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow7(BufferedImage img)
+    {
+        imageShow7.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow8(BufferedImage img)
+    {
+        imageShow8.setIcon(new ImageIcon(img));
+    }
+
+    public void setImageShow9(BufferedImage img)
+    {
+        imageShow9.setIcon(new ImageIcon(img));
+        //System.out.println("image_displayed");
+    }
+
+    public void setImageShowOriginal(BufferedImage img)
+    {
+        imageShowOriginal.setIcon(new ImageIcon(img));
+        //System.out.println("image_displayed");
+    }
+
+
+    public void fillLabels(ArrayList<Individual> processIndividuals){
+        setImageShow9(resize(processIndividuals.get(processIndividuals.size()-1).getImage(), 100, 100));
+        lblImage9.setText(Float.toString(processIndividuals.get(processIndividuals.size()-1).getFitness()));
+        setImageShow8(resize(processIndividuals.get(processIndividuals.size()-2).getImage(), 100, 100));
+        lblImage8.setText(Float.toString(processIndividuals.get(processIndividuals.size()-2).getFitness()));
+        setImageShow7(resize(processIndividuals.get(processIndividuals.size()-3).getImage(), 100, 100));
+        lblImage7.setText(Float.toString(processIndividuals.get(processIndividuals.size()-3).getFitness()));
+        setImageShow6(resize(processIndividuals.get(processIndividuals.size()-4).getImage(), 100, 100));
+        lblImage6.setText(Float.toString(processIndividuals.get(processIndividuals.size()-4).getFitness()));
+        setImageShow5(resize(processIndividuals.get(processIndividuals.size()-5).getImage(), 100, 100));
+        lblImage5.setText(Float.toString(processIndividuals.get(processIndividuals.size()-5).getFitness()));
+        setImageShow4(resize(processIndividuals.get(processIndividuals.size()-6).getImage(), 100, 100));
+        lblImage4.setText(Float.toString(processIndividuals.get(processIndividuals.size()-6).getFitness()));
+        setImageShow3(resize(processIndividuals.get(processIndividuals.size()-7).getImage(), 100, 100));
+        lblImage3.setText(Float.toString(processIndividuals.get(processIndividuals.size()-7).getFitness()));
+        setImageShow2(resize(processIndividuals.get(processIndividuals.size()-8).getImage(), 100, 100));
+        lblImage2.setText(Float.toString(processIndividuals.get(processIndividuals.size()-8).getFitness()));
+        setImageShow1(resize(processIndividuals.get(processIndividuals.size()-9).getImage(), 100, 100));
+        lblImage1.setText(Float.toString(processIndividuals.get(processIndividuals.size()-9).getFitness()));
+        setImageShow0(resize(processIndividuals.get(0).getImage(), 100,100));
+        lblImage0.setText(Float.toString(processIndividuals.get(0).getFitness()));
     }
 }

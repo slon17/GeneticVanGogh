@@ -250,11 +250,12 @@ public class Population {
         }
         population = sons;
         sort(population,0,population.size()-1);
-        currentGeneration++;
 
-        if(currentGeneration == totalGeneration*10/100 || currentGeneration == totalGeneration){
+        if(currentGeneration%(totalGeneration/10)  == 0 || currentGeneration == totalGeneration){
             processIndividuals.add(population.get(population.size()-1));
         }
+        currentGeneration++;
+
         //System.out.println("Current generation: "+currentGeneration);
     }
 

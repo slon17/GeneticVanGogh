@@ -33,6 +33,7 @@ public class MainGui {
     private JLabel lblImage2;
     private JLabel lblImage3;
     private JLabel lblImage4;
+    private JButton btnReset;
     private OriginalImg original;
 
 
@@ -61,7 +62,7 @@ public class MainGui {
             public void actionPerformed(ActionEvent e) {
 
                 setImageShowOriginal(resize(original.img, 100, 100));
-                population.beginGenerationsLBP(original.getMainColors(), 5, true, false, 200, 100);
+                population.beginGenerationsLBP(original.getMainColors(), 5, true, false, 80, 250);
 
                 fillLabels(population.getProcessIndividuals());
             }
@@ -69,10 +70,17 @@ public class MainGui {
         btnPink.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                population.beginGenerationsPink(original.getMainColors(), 5, true, false, 1000, 100, 11);
 
-                setImageShow9(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
-                setImageShow0(resize(original.img,100,100));
+                setImageShowOriginal(resize(original.img, 100, 100));
+                population.beginGenerationsPink(original.getMainColors(), 5, false, false, 80, 250, 7);
+
+                fillLabels(population.getProcessIndividuals());
+            }
+        });
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }

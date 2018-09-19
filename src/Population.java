@@ -408,4 +408,10 @@ public class Population {
     public ArrayList<Individual> getProcessIndividuals() {
         return processIndividuals;
     }
+
+    public void resetPopulation(){
+        population = new ArrayList<>();
+        currentGeneration = 0;
+        processIndividuals = new ArrayList<>();
+    }
 }

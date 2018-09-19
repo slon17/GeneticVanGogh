@@ -17,105 +17,32 @@ public class MainGui {
 
 
     public MainGui() {
-        Population population = new Population(100);
+        Population population = new Population();
 
+        original = new OriginalImg();
+        original.load();
+        Individual ind = new Individual();
+        ind.setImage(original.img);
 
         btnLoad.addActionListener(new ActionListener() {
             @Override
             //button pressed
             public void actionPerformed(ActionEvent e) {
-                PinkSauce pink =new PinkSauce();
-                pink.setDimension(11);
 
-                //loadImageTest
-                original = new OriginalImg();
-                original.load();
-
-                pink.setqColorsOriginal(pink.qColors(original.img));
-                pink.setOriginalColors(original.getMainColors());
-                System.out.println("main colors " + original.getMainColors().size());
-                pink.colorsToInt();
-
-                population.generatePopulation(100);
-                Individual ind = new Individual();
-                ind.setImage(original.img);
-                //population.getPopulation().add(ind);
-                /*for(int j=0; j<100;j++) {
-                    population.getPopulation().get(j).setFitness(j);
-                    System.out.println("Individuo: "+population.getPopulation().get(j).getFitness());
-                }*/
-                Euclidean euclidean = new Euclidean();
-                euclidean.setOriginal(original.img);
-                euclidean.euclidean(population.getPopulation());
-
-                pink.pinkSauce(population.getPopulation());
-
-                LocalBinaryPattern LCB = new LocalBinaryPattern();
-                LCB.histogramOriginalImage = LCB.generateHistogram(original.img);
-                //LCB.localBinaryPattern(population.getPopulation());
-
-
-                for(int i = 0; i<1000; i++){
-                    //euclidean.euclidean(population.getPopulation());
-                    //LCB.localBinaryPattern(population.getPopulation());
-                    pink.pinkSauce(population.getPopulation());
-                    population.reproduceAllByFour(original.getMainColors(), 5, false);
-                }
+                population.beginGenerationsEuclidean(original.getMainColors(), 5, true, false, 1000, 100);
 
                 setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
                 setImageShowMain(resize(original.img,100,100));
-
-                //Individual ind = new Individual();
-                /*ind.setImage(original.img);
-                //population.getPopulation().add(ind);
-                Individual ind2 = new Individual();
-                //population.getPopulation().add(ind);
-                ind2.setImage(ind2.generateRandImage(original.img));
-                Individual ind3 = population.reproduceByFour(ind,ind2,original.getMainColors());
-
-                setImageShowTest(resize(ind3.getImage(),100,100));
-                setImageShowMain(resize(original.img,100,100));*/
-
-
-
-
-
-
-                /*
-                //POBLACION DE PRUEBA
-                ArrayList<Individual> populationTest= new ArrayList<Individual>();
-                for (int i=0;i<20;i++){
-                    Individual individual = new Individual(Individual.generateRandImage(original.img));
-                    //individual.setImage(individual.generateRandImage(original.img));
-                    populationTest.add(individual);
-                }
-                //CORRIDA CON EUCLIDEANO
-                euclidean.euclidean(populationTest);
-                setImageShowMain(original.img);
-                //CORRIDA CON LBP
-                LocalBinaryPattern localBinaryPattern =new LocalBinaryPattern();
-                localBinaryPattern.setHistogramOriginalImage(localBinaryPattern.generateHistogram(original.img));
-                localBinaryPattern.localBinaryPattern(populationTest);
-
-                //populationTest.get(0).getMainColors();
-
-                for (int i=0;i<20;i++){
-
-                }*/
 
             }
         });
         runLBPButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LocalBinaryPattern lbp = new LocalBinaryPattern();
-                //geneticAlg.histogramOriginalImage=geneticAlg.generateHistogram(original.img);
-                //BufferedImage randImg = geneticAlg.generateRandImage(original.img);
-                //comparing 2 histograms
-                //geneticAlg.grade(geneticAlg.generateHistogram(randImg));
-                //displayTest
+                population.beginGenerationsLBP(original.getMainColors(), 5, true, false, 1000, 100);
 
-                //BufferedImage resized= resize(geneticAlg.generateRandImage(original.img),original.img.getHeight()*2,original.img.getWidth()*2);
+                setImageShowTest(resize(population.getPopulation().get(population.getPopulation().size()-1).getImage(),100,100));
+                setImageShowMain(resize(original.img,100,100));
             }
         });
     }

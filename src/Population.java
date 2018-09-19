@@ -10,29 +10,31 @@ public class Population {
     private ArrayList<Individual> population;
     private int individualsQuantity;
     private int currentGeneration;
+    private int totalGeneration;
+    private ArrayList<Individual> processIndividuals;
 
 
-    public Population(int individualsQuantity) {
+    public Population() {
         population = new ArrayList<>();
-        this.individualsQuantity = individualsQuantity;
         currentGeneration = 0;
+        processIndividuals = new ArrayList<>();
     }
 
-    public void generatePopulation(int initialPopulation){
-        for(int i = 0; i<initialPopulation; i++){
-            //Individual newIndividual = new Individual(Individual.generateRandImage(OriginalImg.getImg()));
+    public void generatePopulation(){
+        for(int i = 0; i<individualsQuantity; i++){
             Individual newIndividual = new Individual();
             newIndividual.setImage(newIndividual.generateRandImage(OriginalImg.img));
             population.add(newIndividual);
-            //System.out.println("Individuo: "+population.get(population.size()-1).getImage());
-            //System.out.println(newIndividual);
         }
     }
 
-    public Color mutation(ArrayList<Color> mainColors, int mutationPercentage, Random random){
+    public Color mutation(ArrayList<Color> mainColors, int mutationPercentage, Random random, boolean mutationFlag){
         //Random random = new Random(System.currentTimeMillis());
         int randomPercentage = random.nextInt(100);
-        if(randomPercentage < 100){
+        int mutation = mutationPercentage;
+        if(mutationFlag == false)
+            mutation = 100;
+        if(randomPercentage < mutation){
             int randomColor = random.nextInt(mainColors.size());
             return mainColors.get(randomColor);
         }
@@ -92,9 +94,7 @@ public class Population {
         return son;
     }
 
-    public Individual reproduceByFour(Individual individual1, Individual individual2, ArrayList<Color> mainColors, int mutationPercentage, Random random, boolean mutationFlag, boolean mirrorFlag){
-
-        //Random random = new Random(System.currentTimeMillis());
+    public Individual reproduceByFour(Individual individual1, Individual individual2, ArrayList<Color> mainColors, int mutationPercentage, Random random, boolean mutationFlag, boolean mirrorFlag, boolean colorMutationFlag){
 
         Individual newIndividual1X = new Individual();
         Individual newIndividual1Y = new Individual();
@@ -111,19 +111,19 @@ public class Population {
         int randomOrder = random.nextInt(100);
         BufferedImage newImage;
         if(randomOrder > mutationPercentage){
-            newImage = joinImage(reproduce(newIndividual1X, newIndividual2X, mainColors, mutationPercentage, random, 5, mutationFlag).getImage(),
-                    reproduce(newIndividual1Y, newIndividual2Y, mainColors, mutationPercentage, random, 5, mutationFlag).getImage());
+            newImage = joinImage(reproduce(newIndividual1X, newIndividual2X, mainColors, mutationPercentage, random, 5, mutationFlag, colorMutationFlag).getImage(),
+                    reproduce(newIndividual1Y, newIndividual2Y, mainColors, mutationPercentage, random, 5, mutationFlag, colorMutationFlag).getImage());
         }
         else{
-            newImage = joinImage(reproduce(newIndividual1X, newIndividual2Y, mainColors, mutationPercentage, random, 5, mutationFlag).getImage(),
-                    reproduce(newIndividual1Y, newIndividual2X, mainColors, mutationPercentage, random, 5, mutationFlag).getImage());
+            newImage = joinImage(reproduce(newIndividual1X, newIndividual2Y, mainColors, mutationPercentage, random, 5, mutationFlag, colorMutationFlag).getImage(),
+                    reproduce(newIndividual1Y, newIndividual2X, mainColors, mutationPercentage, random, 5, mutationFlag, colorMutationFlag).getImage());
         }
 
         //newImage = joinImage(reproduce(newIndividual1X, newIndividual2X, mainColors, mutationPercentage, random, 5, mutationFlag).getImage(),
         //        reproduce(newIndividual1Y, newIndividual2Y, mainColors, mutationPercentage, random, 5, mutationFlag).getImage());
         Individual finalIndividual = new Individual();
         finalIndividual.setImage(newImage);
-        //System.out.println("Reproducida: "+newImage.getWidth()+ " "+ newImage.getHeight());
+
         if(mirrorFlag) {
             int mirrorPercentage = random.nextInt(100);
             if (mirrorPercentage < mutationPercentage) {
@@ -135,29 +135,26 @@ public class Population {
             }
         }
 
-
-
         return finalIndividual;
     }
 
-    public Individual reproduce(Individual individual1, Individual individual2, ArrayList<Color> mainColors, int mutationPercentage, Random random, int randomChance, boolean mutationFlag) {
+    public Individual reproduce(Individual individual1, Individual individual2, ArrayList<Color> mainColors, int mutationPercentage, Random random, int randomChance, boolean mutationFlag, boolean colorMutationFlag) {
 
-        //Random random = new Random(System.currentTimeMillis());
         int randomWidth = random.nextInt(individual1.getWidth()/4*3-individual1.getWidth()/4)+individual1.getWidth()/4;
-        //System.out.println("random width: "+randomWidth);
         int randomHeight = random.nextInt(individual1.getHeight()/4*3-individual1.getHeight()/4)+individual1.getHeight()/4;
         int randomSide = random.nextInt(100);
-        //System.out.println(randomSide);
 
         BufferedImage newImage = new BufferedImage(individual1.getWidth(), individual1.getHeight(), BufferedImage.TYPE_INT_ARGB);
         int randomChancePercentage = random.nextInt(100);
-        Color mutationColor = mutation(mainColors, mutationPercentage, random);
+        Color mutationColor = mutation(mainColors, mutationPercentage, random, colorMutationFlag);
 
         for (int i = 0; i < individual1.getWidth(); i++) {
             for (int j = 0; j < individual1.getHeight(); j++) {
-                if (mutationColor != null && randomChancePercentage<randomChance && mutationFlag == true) {//mutation
+                if (mutationColor != null && randomChancePercentage<randomChance && mutationFlag) {//mutation color
                     newImage.setRGB(i, j, mutationColor.getRGB());
-                    //mutationColor = mutation(mainColors, mutationPercentage, random);
+                    if(colorMutationFlag) {
+                        mutationColor = mutation(mainColors, mutationPercentage, random, colorMutationFlag);
+                    }
                     continue;
                 }
                 else if (randomSide < 50) {
@@ -186,102 +183,7 @@ public class Population {
         return newIndividual;
     }
 
-    public void reproduceAllBy4(ArrayList<Color> mainColors, int mutationPercentage, boolean mirrorFlag){
-        ArrayList<Individual> sons = new ArrayList<>();
-        ArrayList<Individual> usedParents = new ArrayList<>();
-        Random random = new Random(System.currentTimeMillis());
-
-        sort(population, 0, population.size()-1);
-
-        ArrayList <Individual> badIndividuals = getPartPopulation(0, population.size()/3);
-        ArrayList <Individual> regularIndividuals = getPartPopulation(population.size()/3, (population.size()/3)*2);
-        ArrayList <Individual> bestIndividuals = getPartPopulation((population.size()/3)*2, population.size());
-
-        int badQuantity = badIndividuals.size();
-        int tempBadQuantity = badQuantity;
-        int regularQuantity = regularIndividuals.size();
-        int tempRegularQuantity = regularQuantity;
-        int bestQuantity = bestIndividuals.size();
-        int tempBestQuantity = bestQuantity;
-        int tempTotal = individualsQuantity;
-
-        while(tempTotal>1){
-            Individual parent1 = null;
-            Individual parent2 = null;
-            Individual son = null;
-            if(bestIndividuals.size() != 0){
-                if(tempBestQuantity > bestQuantity/2){//reproduce best with best
-                    int randomParent1 = random.nextInt(bestIndividuals.size());
-                    parent1 = bestIndividuals.remove(randomParent1);
-                    int randomParent2 = random.nextInt(bestIndividuals.size());
-                    parent2 = bestIndividuals.remove(randomParent2);
-                    son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, false, mirrorFlag);
-                    tempBestQuantity = tempBestQuantity-2;
-                }
-                else{//reproduce best with regular
-                    //System.out.println("Best size: "+bestIndividuals.size());
-                    int randomParent1 = random.nextInt(bestIndividuals.size());
-                    parent1 = bestIndividuals.remove(randomParent1);
-                    int randomParent2 = random.nextInt(regularIndividuals.size());
-                    parent2 = regularIndividuals.remove(randomParent2);
-                    son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, true, mirrorFlag);
-                    tempBestQuantity--;
-                    tempRegularQuantity--;
-                    if(tempBestQuantity == 1){
-                        regularIndividuals.add(bestIndividuals.remove(0));
-                        regularQuantity++;
-                        tempRegularQuantity++;
-                    }
-                }
-            }
-            else if(badIndividuals.size() != 0){
-                if(tempBadQuantity > badQuantity/2){//reproduce bad with bad
-                    int randomParent1 = random.nextInt(badIndividuals.size());
-                    parent1 = badIndividuals.remove(randomParent1);
-                    int randomParent2 = random.nextInt(badIndividuals.size());
-                    parent2 = badIndividuals.remove(randomParent2);
-                    son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, false, mirrorFlag);
-                    tempBadQuantity = tempBadQuantity-2;
-                }
-                else{//reproduce regular with bad
-                    int randomParent1 = random.nextInt(badIndividuals.size());
-                    parent1 = badIndividuals.remove(randomParent1);
-                    int randomParent2 = random.nextInt(regularIndividuals.size());
-                    parent2 = regularIndividuals.remove(randomParent2);
-                    son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, true, mirrorFlag);
-                    tempBestQuantity--;
-                    tempRegularQuantity--;
-                    //System.out.println("Regular with bad");
-                }
-            }
-            tempTotal--;
-            if(son !=null || parent1!=null || parent2!=null){
-                sons.add(son);
-                //System.out.println("1");
-                usedParents.add(parent1);
-                //System.out.println("2");
-                usedParents.add(parent2);
-                //System.out.println("3");
-            }
-        }
-        population = sons;
-        while(sons.size()<individualsQuantity){
-            //System.out.println(usedParents.size());
-            if(usedParents.size()==0){
-                Individual tempIndividual = population.get(0);
-                population.add(tempIndividual);
-            }
-            else {
-                int randomParent = random.nextInt(usedParents.size());
-                population.add(usedParents.remove(randomParent));
-            }
-        }
-        sort(population,0,population.size()-1);
-        currentGeneration++;
-        //System.out.println("Current generation: "+currentGeneration);
-    }
-
-    public void reproduceAllByFour(ArrayList<Color> mainColors, int mutationPercentage, boolean mirrorFlag){
+    public void reproduceAllByFour(ArrayList<Color> mainColors, int mutationPercentage, boolean mirrorFlag, boolean colorMutationFlag){
         ArrayList<Individual> sons = new ArrayList<>();
         ArrayList<Individual> usedParents = new ArrayList<>();
         Random random = new Random(System.currentTimeMillis());
@@ -317,7 +219,7 @@ public class Population {
                 parent1 = bestThree.get(randomBestParent);
                 int randomParent = random.nextInt(bestIndividuals.size());
                 parent2 = bestIndividuals.get(randomParent);
-                son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, false, mirrorFlag);
+                son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, false, mirrorFlag, colorMutationFlag);
                 tempBestQuantity--;
             }
             else if(tempRegularQuantity != 0){//best rest with regular randomly
@@ -325,7 +227,7 @@ public class Population {
                 parent1 = bestIndividuals.get(randomParent1);
                 int randomParent2 = random.nextInt(regularIndividuals.size());
                 parent2 = regularIndividuals.get(randomParent2);
-                son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, false, mirrorFlag);
+                son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, false, mirrorFlag, colorMutationFlag);
                 tempRegularQuantity--;
             }
             else if(tempBadQuantity != 0){//regular with worst
@@ -333,7 +235,7 @@ public class Population {
                 parent1 = badIndividuals.get(randomParent1);
                 int randomParent2 = random.nextInt(regularIndividuals.size());
                 parent2 = regularIndividuals.get(randomParent2);
-                son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, true, mirrorFlag);
+                son = reproduceByFour(parent1, parent2, mainColors, mutationPercentage, random, true, mirrorFlag, colorMutationFlag);
                 tempBadQuantity--;
             }
             else{
@@ -341,28 +243,73 @@ public class Population {
                 son = population.get(randomIndividual);
             }
             tempTotal--;
+
             sons.add(son);
-            //System.out.println("1");
             usedParents.add(parent1);
-            //System.out.println("2");
             usedParents.add(parent2);
-            //System.out.println("3");
         }
         population = sons;
-        /*while(sons.size()<individualsQuantity){
-            //System.out.println(usedParents.size());
-            if(usedParents.size()==0){
-                Individual tempIndividual = population.get(0);
-                population.add(tempIndividual);
-            }
-            else {
-                int randomParent = random.nextInt(usedParents.size());
-                population.add(usedParents.remove(randomParent));
-            }
-        }*/
         sort(population,0,population.size()-1);
         currentGeneration++;
+
+        if(currentGeneration == totalGeneration*10/100 || currentGeneration == totalGeneration){
+            processIndividuals.add(population.get(population.size()-1));
+        }
         //System.out.println("Current generation: "+currentGeneration);
+    }
+
+    public ArrayList<Individual> beginGenerationsEuclidean(ArrayList<Color> mainColors, int mutationPercentage, boolean mirrorFlag, boolean colorMutationFlag, int generations, int populationQuantity){
+        totalGeneration = generations;
+        individualsQuantity = populationQuantity;
+
+        generatePopulation();
+
+        Euclidean euclidean = new Euclidean();
+        euclidean.setOriginal(OriginalImg.img);
+        euclidean.euclidean(population);
+
+        for(int i = 0; i<totalGeneration; i++){
+            reproduceAllByFour(mainColors, mutationPercentage, mirrorFlag, colorMutationFlag);
+            euclidean.euclidean(population);
+        }
+        return getProcessIndividuals();
+    }
+
+    public ArrayList<Individual> beginGenerationsLBP(ArrayList<Color> mainColors, int mutationPercentage, boolean mirrorFlag, boolean colorMutationFlag, int generations, int populationQuantity){
+        totalGeneration = generations;
+        individualsQuantity = populationQuantity;
+
+        generatePopulation();
+
+        LocalBinaryPattern LBP = new LocalBinaryPattern();
+        LBP.histogramOriginalImage = LBP.generateHistogram(OriginalImg.img);
+        LBP.localBinaryPattern(population);
+
+        for(int i = 0; i<totalGeneration; i++){
+            reproduceAllByFour(mainColors, mutationPercentage, mirrorFlag, colorMutationFlag);
+            LBP.localBinaryPattern(population);
+        }
+        return getProcessIndividuals();
+    }
+
+    public ArrayList<Individual> beginGenerationsPink(ArrayList<Color> mainColors, int mutationPercentage, boolean mirrorFlag, boolean colorMutationFlag, int generations, int populationQuantity, int pinkDimension){
+        totalGeneration = generations;
+        individualsQuantity = populationQuantity;
+
+        generatePopulation();
+
+        PinkSauce pink = new PinkSauce();
+        pink.setDimension(pinkDimension);
+        pink.setqColorsOriginal(pink.qColors(OriginalImg.img));
+        pink.setOriginalColors(OriginalImg.getMainColors());
+        pink.colorsToInt();
+        pink.pinkSauce(population);
+
+        for(int i = 0; i<totalGeneration; i++){
+            reproduceAllByFour(mainColors, mutationPercentage, mirrorFlag, colorMutationFlag);
+            pink.pinkSauce(population);
+        }
+        return getProcessIndividuals();
     }
 
 
@@ -376,10 +323,6 @@ public class Population {
 
     public ArrayList<Individual> getPopulation() {
         return population;
-    }
-
-    public void setPopulation(ArrayList<Individual> population) {
-        this.population = population;
     }
 
     public int partition(ArrayList<Individual> population, int low, int high)
@@ -457,4 +400,11 @@ public class Population {
         return  newImage;
     }
 
+    public void extractProcessIndividual(Individual individual){
+        processIndividuals.add(individual);
+    }
+
+    public ArrayList<Individual> getProcessIndividuals() {
+        return processIndividuals;
+    }
 }
